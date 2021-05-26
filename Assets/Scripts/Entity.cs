@@ -1,11 +1,38 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    [Header("Properties")] 
+    public float Speed;
+    
+    public GameObject target;
     public Node startingNode;
     public Node goalNode;
+    public LayerMask targetLayer;
+    public LayerMask obstacleLayer;
+
+    [Header("Patrol State")]
+    public float viewRadius;
+    public float angleRadius;
+    public Transform[] wayPoints;
+
+    private Vector3 _velocity;
+    private StateMachine _sm;
+
+    private void Awake()
+    {
+        _sm = GetComponent<StateMachine>();
+        _sm.AddState("PatrolState", new PatrolState(this, _sm));
+        _sm.ChangeState("PatrolState");
+    }
+
+    private void Update()
+    {
+        _sm.OnUpdate();
+    }
 
     public List<Node> ConstructPath()
     {
@@ -51,9 +78,15 @@ public class Entity : MonoBehaviour
         }
         return null;
     }
-
+    
     public float Heuristic(Vector3 pos)
     {
         return Mathf.Abs((goalNode.transform.position - pos).magnitude);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, viewRadius);
     }
 }
