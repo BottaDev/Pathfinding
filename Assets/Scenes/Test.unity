@@ -239,11 +239,6 @@ MonoBehaviour:
     m_Bits: 0
   viewRadius: 0
   angleRadius: 0
-  wayPoints:
-  - {fileID: 1440066857}
-  - {fileID: 1274751952}
-  - {fileID: 843429449}
-  - {fileID: 522180943}
 --- !u!114 &13397008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1639,7 +1634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &319001343
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1738,7 +1733,6 @@ MonoBehaviour:
     m_Bits: 0
   viewRadius: 0
   angleRadius: 0
-  wayPoints: []
 --- !u!114 &319001348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,7 +1957,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &502004508
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2059,7 +2052,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &522180945
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -2319,7 +2311,6 @@ MonoBehaviour:
   - {fileID: 1131565553}
   - {fileID: 730732689}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &695653081
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3132,7 +3123,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &730732690
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3924,7 +3914,6 @@ MonoBehaviour:
     m_Bits: 0
   viewRadius: 0
   angleRadius: 0
-  wayPoints: []
 --- !u!114 &792592226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4149,7 +4138,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &843429451
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4880,7 +4868,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &930638027
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5222,7 +5209,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1004201928
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5318,7 +5304,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1058179700
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6081,7 +6066,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1131565554
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -6247,11 +6231,6 @@ MonoBehaviour:
     m_Bits: 256
   viewRadius: 5
   angleRadius: 360
-  wayPoints:
-  - {fileID: 930638025}
-  - {fileID: 1304228674}
-  - {fileID: 1440066857}
-  - {fileID: 522180943}
 --- !u!114 &1157244366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6785,7 +6764,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1274751954
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7283,7 +7261,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1304228676
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8323,7 +8300,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1440066859
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8745,7 +8721,6 @@ MonoBehaviour:
   - {fileID: 1935166350}
   - {fileID: 695653080}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1514078452
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10403,7 +10378,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1744052571
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10862,7 +10836,6 @@ MonoBehaviour:
   - {fileID: 1514078451}
   - {fileID: 1744052570}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &1935166351
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -11121,7 +11094,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   IsBlocked: 0
-  Cost: 0
 --- !u!23 &2098079195
 MeshRenderer:
   m_ObjectHideFlags: 0

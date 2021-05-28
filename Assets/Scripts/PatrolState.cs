@@ -16,7 +16,14 @@ public class PatrolState : IState
     
     public void OnUpdate()
     {
+        if (_entity.target != null)
+        {
+            //_sm.ChangeState("ChaseState");
+            return;
+        }
+        
         FindVisibleTargets();
+        Move();
     }
 
     public void Move()
@@ -38,8 +45,12 @@ public class PatrolState : IState
 
             if (Vector3.Angle(_entity.transform.forward, dirToTarget) < _entity.angleRadius / 2)
             {
-                if(!Physics.Raycast(_entity.transform.position, dirToTarget, dirToTarget.magnitude, _entity.obstacleLayer))
+                if (!Physics.Raycast(_entity.transform.position, dirToTarget, dirToTarget.magnitude,
+                    _entity.obstacleLayer))
+                {
                     _entity.target = target;
+                    _entity.AlertEntities();
+                }
             }
         }
     }
