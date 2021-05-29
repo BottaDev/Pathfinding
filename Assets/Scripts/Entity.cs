@@ -10,18 +10,20 @@ public class Entity : MonoBehaviour
     public float Speed;
     
     [Header("Patrol")]
-    public Transform[] wayPoints;
+    public List<Transform> wayPoints;
     public float stoppingDistance;
     [HideInInspector]
     public int currentWayPoint = 0;
-    public Transform[] visibleWaypoints;
-    
+    [HideInInspector]
+    public List<Transform> visibleNodes;
+
     [Header("Variables")]
     public GameObject target;
     public Node startingNode;
     public Node goalNode;
     public LayerMask targetLayer;
     public LayerMask obstacleLayer;
+    public LayerMask nodeLayer;
 
     [Header("Field of View")]
     public float viewRadius;
@@ -73,21 +75,17 @@ public class Entity : MonoBehaviour
                 return path;
             }
 
-            /*foreach (Node next in current.neighbors)
+            foreach (var next in current.neighbors)
             {
-                if (!next.IsBlocked)
+                float newCost = costSoFar[current] + next.Cost;
+                if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
                 {
-                    float newCost = costSoFar[current] + next.Cost;
-                    
-                    if (!costSoFar.ContainsKey(next) || newCost < costSoFar[next])
-                    {
-                        costSoFar[next] = newCost;
-                        float priority = newCost + Heuristic(next.transform.position);
-                        frontier.Put(next, priority);
-                        cameFrom[next] = current;
-                    }
+                    costSoFar[next] = newCost;
+                    float priority = newCost + Heuristic(next.transform.position);
+                    frontier.Put(next, priority);
+                    cameFrom[next] = current;
                 }
-            }*/
+            }
         }
         return null;
     }

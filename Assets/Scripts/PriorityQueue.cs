@@ -11,15 +11,18 @@ public class PriorityQueue
 
     public Node Get()
     {
-        if (Count() == 0) return null;
+        if (Count() == 0) 
+            return null;
 
         Node n = null;
 
         foreach (var item in _allNodes)
         {
-            if (n == null) n = item.Key;
+            if (n == null) 
+                n = item.Key;
 
-            if (item.Value < _allNodes[n]) n = item.Key;
+            if (item.Value < _allNodes[n]) 
+                n = item.Key;
         }
 
         _allNodes.Remove(n);
