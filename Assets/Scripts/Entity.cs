@@ -9,6 +9,14 @@ public class Entity : MonoBehaviour
     [Header("Properties")] 
     public float Speed;
     
+    [Header("Patrol")]
+    public Transform[] wayPoints;
+    public float stoppingDistance;
+    [HideInInspector]
+    public int currentWayPoint = 0;
+    public Transform[] visibleWaypoints;
+    
+    [Header("Variables")]
     public GameObject target;
     public Node startingNode;
     public Node goalNode;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Windows.Speech;
 
 public class PatrolState : IState
 {
@@ -24,11 +25,32 @@ public class PatrolState : IState
         
         FindVisibleTargets();
         Move();
+        Rotate();
     }
 
     public void Move()
     {
+        float step =  _entity.Speed * Time.deltaTime;
+        Vector3 pos = _entity.wayPoints[_entity.currentWayPoint].transform.position;
+        pos.y = _entity.transform.position.y;
+        _entity.transform.position = Vector3.MoveTowards(_entity.transform.position, pos, step);
         
+        Vector3 pointDistance = _entity.wayPoints[_entity.currentWayPoint].transform.position - _entity.transform.position;
+        
+        if (pointDistance.magnitude < _entity.stoppingDistance)
+        {
+            _entity.currentWayPoint++;
+            if (_entity.currentWayPoint > _entity.wayPoints.Length - 1)
+                _entity.currentWayPoint = 0;
+        }
+    }
+
+    private void Rotate()
+    {
+        Vector3 pos = _entity.wayPoints[_entity.currentWayPoint].transform.position;
+        pos.y = _entity.transform.position.y;
+        
+        _entity.transform.LookAt(pos);
     }
 
     public void FindVisibleTargets()
