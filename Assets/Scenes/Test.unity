@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &13397003
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -210,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 13397002}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -14.05, y: 0.8, z: -1.51}
+  m_LocalPosition: {x: -11.12, y: 0.8, z: 3.28}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -229,8 +229,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  wayPoints: []
-  stoppingDistance: 0
+  wayPoints:
+  - {fileID: 522180943}
+  - {fileID: 1440066857}
+  - {fileID: 1274751952}
+  - {fileID: 843429449}
+  stoppingDistance: 0.2
   currentWayPoint: 0
   visibleNodes: []
   target: {fileID: 0}
@@ -245,8 +249,8 @@ MonoBehaviour:
   nodeLayer:
     serializedVersion: 2
     m_Bits: 1024
-  viewRadius: 0
-  angleRadius: 0
+  viewRadius: 4
+  angleRadius: 90
 --- !u!114 &13397008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1617,7 +1621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 276449737}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -1.5, y: 0.8, z: 1}
+  m_LocalPosition: {x: 1.9, y: 0.8, z: 0.81}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1656,7 +1660,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &319001343
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1725,7 +1729,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 319001342}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -6.06, y: 0.8, z: 1.1500006}
+  m_LocalPosition: {x: -6.07, y: 0.8, z: 5.75}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1744,8 +1748,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  wayPoints: []
-  stoppingDistance: 0
+  wayPoints:
+  - {fileID: 1004201926}
+  - {fileID: 1058179698}
+  stoppingDistance: 0.2
   currentWayPoint: 0
   visibleNodes: []
   target: {fileID: 0}
@@ -1760,8 +1766,8 @@ MonoBehaviour:
   nodeLayer:
     serializedVersion: 2
     m_Bits: 1024
-  viewRadius: 0
-  angleRadius: 0
+  viewRadius: 4
+  angleRadius: 90
 --- !u!114 &319001348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3579,7 +3585,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &792592221
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3648,7 +3654,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792592220}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -3.0799997, y: 0.8, z: -5.0999994}
+  m_LocalPosition: {x: -3.15, y: 0.8, z: -0.96}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3667,8 +3673,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1
-  wayPoints: []
-  stoppingDistance: 0
+  wayPoints:
+  - {fileID: 1744052569}
+  - {fileID: 1131565552}
+  - {fileID: 695653079}
+  - {fileID: 1514078450}
+  - {fileID: 1935166349}
+  stoppingDistance: 0.2
   currentWayPoint: 0
   visibleNodes: []
   target: {fileID: 0}
@@ -3683,8 +3694,8 @@ MonoBehaviour:
   nodeLayer:
     serializedVersion: 2
     m_Bits: 1024
-  viewRadius: 0
-  angleRadius: 0
+  viewRadius: 4
+  angleRadius: 90
 --- !u!114 &792592226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6210,7 +6221,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1157244360}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -2.42, y: 0.8, z: 0.39}
+  m_LocalPosition: {x: -11.13, y: 0.8, z: -0.05}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children: []
   m_Father: {fileID: 0}
