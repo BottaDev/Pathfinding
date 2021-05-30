@@ -12,15 +12,19 @@ public class Entity : MonoBehaviour
     [Header("Patrol")]
     public List<Transform> wayPoints;
     public float stoppingDistance;
-    [HideInInspector]
+    //[HideInInspector]
     public int currentWayPoint = 0;
     [HideInInspector]
     public List<Transform> visibleNodes;
-
-    [Header("Variables")]
+    
+    [HideInInspector]
     public GameObject target;
+    [HideInInspector]
     public Node startingNode;
+    [HideInInspector]
     public Node goalNode;
+    
+    [Header("Variables")]
     public LayerMask targetLayer;
     public LayerMask obstacleLayer;
     public LayerMask nodeLayer;
@@ -49,6 +53,22 @@ public class Entity : MonoBehaviour
     private void Update()
     {
         _sm.OnUpdate();
+    }
+
+    public void Move(Vector3 newPos)
+    {
+        float step =  Speed * Time.deltaTime;
+        
+        newPos.y = transform.position.y;
+        transform.position = Vector3.MoveTowards(transform.position, newPos, step);
+        
+        Rotate(newPos);
+    }
+
+    private void Rotate(Vector3 newPos)
+    {
+        newPos.y = transform.position.y;
+        transform.LookAt(newPos);
     }
 
     public List<Node> ConstructPath()
@@ -97,6 +117,8 @@ public class Entity : MonoBehaviour
         {
             entity.target = target;
         }
+        
+        Destroy(gameObject);
     }
     
     public float Heuristic(Vector3 pos)
@@ -128,6 +150,9 @@ public class Entity : MonoBehaviour
     
     public Node GetNerbyTargetNode()
     {
+        if (target == null)
+            return null;
+        
         GameObject nerbyNode = null;
 
         List<Node> allNodes = GameObject.FindObjectsOfType<Node>().ToList();

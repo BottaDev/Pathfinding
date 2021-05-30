@@ -28,21 +28,23 @@ public class PatrolState : IState
         FindVisibleTargets();
         FindVisibleNodes();
         
-        Move();
+        if (_entity.visibleNodes.Contains(_entity.wayPoints[_entity.currentWayPoint]))
+            PatrolNodes();
+        else
+            MoveToNodes();
         
-        Rotate();
+        if (_returnPath.Count == 0)
+            _entity.Move(_entity.wayPoints[_entity.currentWayPoint].transform.position);
+        else
+            _entity.Move(_returnPath[_currentNode].transform.position);
     }
 
     private void PatrolNodes()
     {
         _returnPath.Clear();
         
-        float step =  _entity.Speed * Time.deltaTime;
+        _entity.Move(_entity.wayPoints[_entity.currentWayPoint].transform.position);
         
-        Vector3 pos = _entity.wayPoints[_entity.currentWayPoint].transform.position;
-        pos.y = _entity.transform.position.y;
-        _entity.transform.position = Vector3.MoveTowards(_entity.transform.position, pos, step);
-    
         Vector3 pointDistance = _entity.wayPoints[_entity.currentWayPoint].transform.position - _entity.transform.position;
     
         if (pointDistance.magnitude < _entity.stoppingDistance)
@@ -67,39 +69,15 @@ public class PatrolState : IState
             _returnPath.Reverse();
 
             _currentNode = 0;
+            _entity.currentWayPoint = 0;
         }
         
-        float step =  _entity.Speed * Time.deltaTime;
+        _entity.Move(_returnPath[_currentNode].transform.position);
         
-        Vector3 pos = _returnPath[_currentNode].transform.position;
-        pos.y = _entity.transform.position.y;
-        _entity.transform.position = Vector3.MoveTowards(_entity.transform.position, pos, step);
-    
         Vector3 pointDistance = _returnPath[_currentNode].transform.position - _entity.transform.position;
     
         if (pointDistance.magnitude < _entity.stoppingDistance)
             _currentNode++;
-    }
-
-    public void Move()
-    {
-        if (_entity.visibleNodes.Contains(_entity.wayPoints[_entity.currentWayPoint]))
-            PatrolNodes();
-        else
-            MoveToNodes();
-    }
-
-    private void Rotate()
-    {
-        Vector3 pos;
-        if (_returnPath.Count == 0)
-            pos = _entity.wayPoints[_entity.currentWayPoint].transform.position;
-        else
-            pos = _returnPath[_currentNode].transform.position;
-        
-        pos.y = _entity.transform.position.y;
-        
-        _entity.transform.LookAt(pos);
     }
 
     public void FindVisibleTargets()

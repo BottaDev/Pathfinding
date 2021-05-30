@@ -5,6 +5,5 @@ using UnityEngine;
 public interface IState
 {
     void OnUpdate();
-    void Move();
     void FindVisibleTargets();
 }

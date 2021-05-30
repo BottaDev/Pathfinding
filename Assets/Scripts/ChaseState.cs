@@ -23,11 +23,7 @@ public class ChaseState : IState
     public void OnUpdate()
     {
         FindVisibleTargets();
-        Move();
-    }
-
-    public void Move()
-    {
+        
         if (_targetIsVisible)
             ChaseTarget();
         else
@@ -38,11 +34,8 @@ public class ChaseState : IState
     {
         if (_lastNodeReached)
         {
-            float step =  _entity.Speed * Time.deltaTime;
-            
-            _lastTargetPosition.y = _entity.transform.position.y;
-            _entity.transform.position = Vector3.MoveTowards(_entity.transform.position, _lastTargetPosition, step);
-    
+            _entity.Move(_lastTargetPosition);
+
             Vector3 pointDistance = _lastTargetPosition - _entity.transform.position;
 
             if (pointDistance.magnitude < _entity.stoppingDistance)
@@ -57,19 +50,21 @@ public class ChaseState : IState
             {
                 _entity.startingNode = _entity.GetNerbyNode();
                 _entity.goalNode = _entity.GetNerbyTargetNode();
-            
+
+                if (_entity.goalNode == null)
+                {
+                    _lastNodeReached = true;
+                    return;
+                }
+
                 _chasePath = _entity.ConstructPath();
                 _chasePath.Reverse();
 
                 _currentNode = 0;
             }
-        
-            float step =  _entity.Speed * Time.deltaTime;
-        
-            Vector3 pos = _chasePath[_currentNode].transform.position;
-            pos.y = _entity.transform.position.y;
-            _entity.transform.position = Vector3.MoveTowards(_entity.transform.position, pos, step);
-    
+            
+            _entity.Move(_chasePath[_currentNode].transform.position);
+
             Vector3 pointDistance = _chasePath[_currentNode].transform.position - _entity.transform.position;
 
             if (pointDistance.magnitude < _entity.stoppingDistance)
@@ -78,13 +73,15 @@ public class ChaseState : IState
                 if (_currentNode > _chasePath.Count - 1)
                     _lastNodeReached = true;
             }
-                
         }
     }
     
     private void ChaseTarget()
     {
+        if (_entity.target == null)
+            return;
         
+        _entity.Move(_entity.target.transform.position);
     }
 
     public void FindVisibleTargets()
