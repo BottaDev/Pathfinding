@@ -43,8 +43,8 @@ public class Entity : MonoBehaviour
     private void Awake()
     {
         _sm = GetComponent<StateMachine>();
-        _sm.AddState("PatrolState", new PatrolState(this, _sm));
-        _sm.AddState("ChaseState", new ChaseState(this, _sm));
+        //_sm.AddState("PatrolState", new PatrolState(this, _sm));
+        //_sm.AddState("ChaseState", new ChaseState(this, _sm));
         _sm.ChangeState("PatrolState");
     }
 
