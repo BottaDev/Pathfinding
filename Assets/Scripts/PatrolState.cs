@@ -1,57 +1,60 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.Windows.Speech;
 
 public class PatrolState : IState
 {
     private StateMachine _sm;
-    private readonly Entity _entity;
+    private readonly Enemy _enemy;
     private List<Node> _returnPath = new List<Node>();
-    private int _currentNode = 0;
+    private int _currentReturnNode = 0;
+    private List<Transform> _visibleNodes = new List<Transform>();
 
-    public PatrolState(Entity entity, StateMachine sm)
+    public PatrolState(Enemy enemy, StateMachine sm)
     {
         _sm = sm;
-        _entity = entity;
+        _enemy = enemy;
     }
     
     public void OnUpdate()
-    {
-        if (_entity.target != null)
+    {   
+        if (_enemy.target != null)
         {
             _sm.ChangeState("ChaseState");
             return;
         }
-        
-        FindVisibleTargets();
+
+        _enemy.target = _enemy.ApplyFOV(_enemy.targetLayer);
+
         FindVisibleNodes();
         
-        if (_entity.visibleNodes.Contains(_entity.wayPoints[_entity.currentWayPoint]))
+        if (_visibleNodes.Contains(_enemy.wayPoints[_enemy.currentWayPoint]))
             PatrolNodes();
         else
             MoveToNodes();
         
         if (_returnPath.Count == 0)
-            _entity.Move(_entity.wayPoints[_entity.currentWayPoint].transform.position);
+            _enemy.Move(_enemy.wayPoints[_enemy.currentWayPoint].transform.position);
         else
-            _entity.Move(_returnPath[_currentNode].transform.position);
+            _enemy.Move(_returnPath[_currentReturnNode].transform.position);
     }
-
+    
+    /// <summary>
+    /// Patrols the waypoints of the enemy
+    /// </summary>
     private void PatrolNodes()
     {
         _returnPath.Clear();
         
-        _entity.Move(_entity.wayPoints[_entity.currentWayPoint].transform.position);
+        _enemy.Move(_enemy.wayPoints[_enemy.currentWayPoint].transform.position);
         
-        Vector3 pointDistance = _entity.wayPoints[_entity.currentWayPoint].transform.position - _entity.transform.position;
+        Vector3 pointDistance = _enemy.wayPoints[_enemy.currentWayPoint].transform.position - _enemy.transform.position;
     
-        if (pointDistance.magnitude < _entity.stoppingDistance)
+        if (pointDistance.magnitude < _enemy.StoppingDistance)
         {
-            _entity.currentWayPoint++;
-            if (_entity.currentWayPoint > _entity.wayPoints.Count - 1)
-                _entity.currentWayPoint = 0;
+            _enemy.currentWayPoint++;
+            if (_enemy.currentWayPoint > _enemy.wayPoints.Count - 1)
+                _enemy.currentWayPoint = 0;
         }
     }
 
@@ -62,68 +65,42 @@ public class PatrolState : IState
     {
         if (_returnPath.Count == 0)
         {
-            _entity.startingNode = _entity.GetNerbyNode();
-            _entity.goalNode = _entity.wayPoints[0].gameObject.GetComponent<Node>();
-            
-            _returnPath = _entity.ConstructPath();
+            _returnPath = _enemy.ConstructPath(_enemy.GetNerbyNode(), _enemy.wayPoints[0].gameObject.GetComponent<Node>());
             _returnPath.Reverse();
 
-            _currentNode = 0;
-            _entity.currentWayPoint = 0;
+            _currentReturnNode = 0;
+            _enemy.currentWayPoint = 0;
+            
+            // Means the entity is already over the node
+            if (_returnPath.Count == 0)
+                PatrolNodes();
         }
 
-        if (_returnPath.Count == 0) // Means the entity is already over the node
-            PatrolNodes();
-
-        _entity.Move(_returnPath[_currentNode].transform.position);
+        _enemy.Move(_returnPath[_currentReturnNode].transform.position);
         
-        Vector3 pointDistance = _returnPath[_currentNode].transform.position - _entity.transform.position;
+        Vector3 pointDistance = _returnPath[_currentReturnNode].transform.position - _enemy.transform.position;
     
-        if (pointDistance.magnitude < _entity.stoppingDistance)
-            _currentNode++;
-    }
-
-    public void FindVisibleTargets()
-    {
-        _entity.target = null;
-
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(_entity.transform.position, _entity.viewRadius, _entity.targetLayer);
-
-        foreach (var item in targetsInViewRadius)
-        {
-            GameObject target = item.gameObject;
-
-            Vector3 dirToTarget = target.transform.position - _entity.transform.position;
-
-            if (Vector3.Angle(_entity.transform.forward, dirToTarget) < _entity.angleRadius / 2)
-            {
-                if (!Physics.Raycast(_entity.transform.position, dirToTarget, dirToTarget.magnitude,
-                    _entity.obstacleLayer))
-                {
-                    _entity.target = target;
-                    _entity.AlertEntities();
-                }
-            }
-        }
+        if (pointDistance.magnitude < _enemy.StoppingDistance)
+            _currentReturnNode++;
     }
     
-    public void FindVisibleNodes()
+    private void FindVisibleNodes()
     {
-        _entity.visibleNodes.Clear();
+        _visibleNodes.Clear();
 
-        Collider[] nodesInViewRadius = Physics.OverlapSphere(_entity.transform.position, _entity.viewRadius, _entity.nodeLayer);
+        Collider[] nodesInViewRadius = Physics.OverlapSphere(_enemy.transform.position, _enemy.viewRadius, _enemy.nodeLayer);
 
         foreach (var item in nodesInViewRadius)
         {
             GameObject node = item.gameObject;
 
-            Vector3 dirToTarget = node.transform.position - _entity.transform.position;
+            Vector3 dirToTarget = node.transform.position - _enemy.transform.position;
 
-            if (Vector3.Angle(_entity.transform.forward, dirToTarget) < _entity.angleRadius / 2)
+            if (Vector3.Angle(_enemy.transform.forward, dirToTarget) < _enemy.angleRadius / 2)
             {
-                if (!Physics.Raycast(_entity.transform.position, dirToTarget, dirToTarget.magnitude,
-                    _entity.obstacleLayer))
-                    _entity.visibleNodes.Add(node.transform);
+                if (!Physics.Raycast(_enemy.transform.position, dirToTarget, dirToTarget.magnitude,
+                    _enemy.obstacleLayer))
+                    _visibleNodes.Add(node.transform);
             }
         }
     }

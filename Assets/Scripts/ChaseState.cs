@@ -1,108 +1,126 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class ChaseState : IState
 {
     private StateMachine _sm;
-    private readonly Entity _entity;
-    private int _currentNode = 0;
+    private readonly Enemy _enemy;
+    private int _currentChaseNode = 0;
     private bool _targetIsVisible;
     private bool _lastNodeReached;
 
-    public ChaseState(Entity entity, StateMachine sm)
+    public ChaseState(Enemy enemy, StateMachine sm)
     {
         _sm = sm;
-        _entity = entity;
+        _enemy = enemy;
     }
     
     public void OnUpdate()
     {
-        FindVisibleTargets();
-        
-        if (_targetIsVisible)
-            ChaseTarget();
-        else
-            MoveToLastPos();
-    }
+        GameObject t = _enemy.ApplyFOV(_enemy.targetLayer);
+        _targetIsVisible = t; 
 
+        if (_targetIsVisible)
+        {
+            _enemy.lastTargetPosition = t.transform.position;
+            _enemy.AlertEnemies();
+            ChaseTarget();   
+        }
+        else
+        {
+            MoveToLastPos();
+        }
+    }
+    
+    /// <summary>
+    /// Chase the target without using nodes
+    /// </summary>
+    private void ChaseTarget()
+    {
+        if (_enemy.target == null)
+            return;
+        
+        _enemy.Move(_enemy.target.transform.position);
+    }
+    
+    /// <summary>
+    /// Moves to the last position seen of the target 
+    /// </summary>
     private void MoveToLastPos()
     {
         if (_lastNodeReached)
         {
-            _entity.Move(Entity.lastTargetPosition);
+            _enemy.Move(_enemy.lastTargetPosition);
 
-            Vector3 pointDistance = Entity.lastTargetPosition - _entity.transform.position;
+            Vector3 pointDistance = _enemy.lastTargetPosition - _enemy.transform.position;
 
-            if (pointDistance.magnitude < _entity.stoppingDistance)
+            if (pointDistance.magnitude < _enemy.StoppingDistance)
             {
-                _entity.target = null; 
+                _enemy.target = null; 
                 _sm.ChangeState("PatrolState");
             }
         }
         else
         {
-            if (_entity.chasePath.Count == 0)
+            if (_enemy.chasePath.Count == 0)
             {
-                _entity.startingNode = _entity.GetNerbyNode();
-                _entity.goalNode = _entity.GetNerbyTargetNode();
-
-                if (_entity.goalNode == null)
+                Node goalNode = GetNerbyTargetNode();
+                
+                // Means the target is death
+                if (goalNode == null)
                 {
                     _lastNodeReached = true;
                     return;
                 }
+                
+                _enemy.chasePath = _enemy.ConstructPath(_enemy.GetNerbyNode(), goalNode);
+                _enemy.chasePath.Reverse();
 
-                _entity.chasePath = _entity.ConstructPath();
-                _entity.chasePath.Reverse();
+                _currentChaseNode = 0;
 
-                _currentNode = 0;
+                if (_enemy.chasePath.Count == 0)
+                {
+                    _lastNodeReached = true;
+                    return;
+                }
             }
             
-            _entity.Move(_entity.chasePath[_currentNode].transform.position);
+            _enemy.Move(_enemy.chasePath[_currentChaseNode].transform.position);
 
-            Vector3 pointDistance = _entity.chasePath[_currentNode].transform.position - _entity.transform.position;
+            Vector3 pointDistance = _enemy.chasePath[_currentChaseNode].transform.position - _enemy.transform.position;
 
-            if (pointDistance.magnitude < _entity.stoppingDistance)
+            if (pointDistance.magnitude < _enemy.StoppingDistance)
             {
-                _currentNode++;
-                if (_currentNode > _entity.chasePath.Count - 1)
+                _currentChaseNode++;
+                if (_currentChaseNode > _enemy.chasePath.Count - 1)
                     _lastNodeReached = true;
             }
         }
     }
     
-    private void ChaseTarget()
+    private Node GetNerbyTargetNode()
     {
-        if (_entity.target == null)
-            return;
+        if (_enemy.target == null)
+            return null;
         
-        _entity.Move(_entity.target.transform.position);
-    }
+        GameObject nerbyNode = null;
 
-    public void FindVisibleTargets()
-    {
-        _targetIsVisible = false;
+        List<Node> allNodes = GameObject.FindObjectsOfType<Node>().ToList();
 
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(_entity.transform.position, _entity.viewRadius, _entity.targetLayer);
-
-        foreach (var item in targetsInViewRadius)
+        float distance = 999f;
+        
+        foreach (var item in allNodes)
         {
-            GameObject target = item.gameObject;
+            Vector3 nodeDistance = item.transform.position - _enemy.target.transform.position;
 
-            Vector3 dirToTarget = target.transform.position - _entity.transform.position;
-
-            if (Vector3.Angle(_entity.transform.forward, dirToTarget) < _entity.angleRadius / 2)
+            if (nodeDistance.magnitude < distance)
             {
-                if (!Physics.Raycast(_entity.transform.position, dirToTarget, dirToTarget.magnitude,
-                    _entity.obstacleLayer))
-                {
-                    _targetIsVisible = true;
-                    Entity.lastTargetPosition = target.transform.position;
-                }
+                distance = nodeDistance.magnitude;
+                nerbyNode = item.gameObject;
             }
         }
+        
+        return nerbyNode.GetComponent<Node>();
     }
 }

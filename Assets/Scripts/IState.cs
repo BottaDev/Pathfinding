@@ -5,5 +5,4 @@ using UnityEngine;
 public interface IState
 {
     void OnUpdate();
-    void FindVisibleTargets();
 }

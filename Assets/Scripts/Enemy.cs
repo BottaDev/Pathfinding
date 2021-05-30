@@ -22,13 +22,13 @@ public class Enemy : MonoBehaviour
     public LayerMask obstacleLayer;
 
     [Header("DEBUG")]
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject target;
-    //[HideInInspector]
+    [HideInInspector]
     public int currentWayPoint = 0;
-    //[HideInInspector]
+    [HideInInspector]
     public List<Node> chasePath = new List<Node>();
-    //[HideInInspector]
+    [HideInInspector]
     public Vector3 lastTargetPosition;
     
     private StateMachine _sm;
@@ -37,9 +37,9 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _sm = GetComponent<StateMachine>();
-        _sm.AddState("Patrol", new Patrol(this, _sm));
-        _sm.AddState("Chase", new Chase(this, _sm));
-        _sm.ChangeState("Patrol");
+        _sm.AddState("PatrolState", new PatrolState(this, _sm));
+        _sm.AddState("ChaseState", new ChaseState(this, _sm));
+        _sm.ChangeState("PatrolState");
     }
 
     private void Start()
@@ -102,8 +102,6 @@ public class Enemy : MonoBehaviour
             enemy.target = target;
             enemy.lastTargetPosition = target.transform.position;
         }
-
-        //Destroy(gameObject);
     }
     
     public GameObject ApplyFOV(LayerMask targetMask)
