@@ -8,11 +8,9 @@ public class ChaseState : IState
 {
     private StateMachine _sm;
     private readonly Entity _entity;
-    private List<Node> _chasePath = new List<Node>();
     private int _currentNode = 0;
     private bool _targetIsVisible;
     private bool _lastNodeReached;
-    private Vector3 _lastTargetPosition;
 
     public ChaseState(Entity entity, StateMachine sm)
     {
@@ -34,9 +32,9 @@ public class ChaseState : IState
     {
         if (_lastNodeReached)
         {
-            _entity.Move(_lastTargetPosition);
+            _entity.Move(Entity.lastTargetPosition);
 
-            Vector3 pointDistance = _lastTargetPosition - _entity.transform.position;
+            Vector3 pointDistance = Entity.lastTargetPosition - _entity.transform.position;
 
             if (pointDistance.magnitude < _entity.stoppingDistance)
             {
@@ -46,7 +44,7 @@ public class ChaseState : IState
         }
         else
         {
-            if (_chasePath.Count == 0)
+            if (_entity.chasePath.Count == 0)
             {
                 _entity.startingNode = _entity.GetNerbyNode();
                 _entity.goalNode = _entity.GetNerbyTargetNode();
@@ -57,20 +55,20 @@ public class ChaseState : IState
                     return;
                 }
 
-                _chasePath = _entity.ConstructPath();
-                _chasePath.Reverse();
+                _entity.chasePath = _entity.ConstructPath();
+                _entity.chasePath.Reverse();
 
                 _currentNode = 0;
             }
             
-            _entity.Move(_chasePath[_currentNode].transform.position);
+            _entity.Move(_entity.chasePath[_currentNode].transform.position);
 
-            Vector3 pointDistance = _chasePath[_currentNode].transform.position - _entity.transform.position;
+            Vector3 pointDistance = _entity.chasePath[_currentNode].transform.position - _entity.transform.position;
 
             if (pointDistance.magnitude < _entity.stoppingDistance)
             {
                 _currentNode++;
-                if (_currentNode > _chasePath.Count - 1)
+                if (_currentNode > _entity.chasePath.Count - 1)
                     _lastNodeReached = true;
             }
         }
@@ -102,7 +100,7 @@ public class ChaseState : IState
                     _entity.obstacleLayer))
                 {
                     _targetIsVisible = true;
-                    _lastTargetPosition = target.transform.position;
+                    Entity.lastTargetPosition = target.transform.position;
                 }
             }
         }

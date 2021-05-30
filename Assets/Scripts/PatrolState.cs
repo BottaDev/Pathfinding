@@ -71,7 +71,10 @@ public class PatrolState : IState
             _currentNode = 0;
             _entity.currentWayPoint = 0;
         }
-        
+
+        if (_returnPath.Count == 0) // Means the entity is already over the node
+            PatrolNodes();
+
         _entity.Move(_returnPath[_currentNode].transform.position);
         
         Vector3 pointDistance = _returnPath[_currentNode].transform.position - _entity.transform.position;

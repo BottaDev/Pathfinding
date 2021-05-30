@@ -23,6 +23,9 @@ public class Entity : MonoBehaviour
     public Node startingNode;
     [HideInInspector]
     public Node goalNode;
+    [HideInInspector]
+    public List<Node> chasePath = new List<Node>();
+    public static Vector3 lastTargetPosition;
     
     [Header("Variables")]
     public LayerMask targetLayer;
@@ -116,8 +119,9 @@ public class Entity : MonoBehaviour
         foreach (Entity entity in _entities)
         {
             entity.target = target;
+            entity.chasePath.Clear();
         }
-        
+
         Destroy(gameObject);
     }
     
@@ -137,7 +141,7 @@ public class Entity : MonoBehaviour
         foreach (var item in targetsInViewRadius)
         {
             Vector3 nodeDistance = item.transform.position - transform.position;
-
+            
             if (nodeDistance.magnitude < distance)
             {
                 distance = nodeDistance.magnitude;

@@ -2565,6 +2565,7 @@ MonoBehaviour:
   target: {fileID: 0}
   startingNode: {fileID: 522180944}
   goalNode: {fileID: 1440066858}
+  chasePath: []
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -5715,7 +5716,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &1157244361
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5814,6 +5815,7 @@ MonoBehaviour:
   target: {fileID: 0}
   startingNode: {fileID: 522180944}
   goalNode: {fileID: 1440066858}
+  chasePath: []
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -10107,6 +10109,7 @@ MonoBehaviour:
   target: {fileID: 0}
   startingNode: {fileID: 522180944}
   goalNode: {fileID: 1440066858}
+  chasePath: []
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -10684,7 +10687,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1892590061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10719,6 +10722,7 @@ MonoBehaviour:
   target: {fileID: 0}
   startingNode: {fileID: 522180944}
   goalNode: {fileID: 1440066858}
+  chasePath: []
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
