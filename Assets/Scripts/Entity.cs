@@ -8,7 +8,7 @@ public class Entity : MonoBehaviour
 {
     [Header("Properties")] 
     public float Speed;
-    
+
     [Header("Patrol")]
     public List<Transform> wayPoints;
     public float stoppingDistance;
@@ -37,6 +37,7 @@ public class Entity : MonoBehaviour
     {
         _sm = GetComponent<StateMachine>();
         _sm.AddState("PatrolState", new PatrolState(this, _sm));
+        _sm.AddState("ChaseState", new ChaseState(this, _sm));
         _sm.ChangeState("PatrolState");
     }
 
@@ -101,6 +102,50 @@ public class Entity : MonoBehaviour
     public float Heuristic(Vector3 pos)
     {
         return Mathf.Abs((goalNode.transform.position - pos).magnitude);
+    }
+    
+    public Node GetNerbyNode()
+    {
+        GameObject nerbyNode = null;
+        
+        Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, viewRadius, nodeLayer);
+
+        float distance = 999f;
+        
+        foreach (var item in targetsInViewRadius)
+        {
+            Vector3 nodeDistance = item.transform.position - transform.position;
+
+            if (nodeDistance.magnitude < distance)
+            {
+                distance = nodeDistance.magnitude;
+                nerbyNode = item.gameObject;
+            }
+        }
+        
+        return nerbyNode.GetComponent<Node>();
+    }
+    
+    public Node GetNerbyTargetNode()
+    {
+        GameObject nerbyNode = null;
+
+        List<Node> allNodes = GameObject.FindObjectsOfType<Node>().ToList();
+
+        float distance = 999f;
+        
+        foreach (var item in allNodes)
+        {
+            Vector3 nodeDistance = item.transform.position - target.transform.position;
+
+            if (nodeDistance.magnitude < distance)
+            {
+                distance = nodeDistance.magnitude;
+                nerbyNode = item.gameObject;
+            }
+        }
+        
+        return nerbyNode.GetComponent<Node>();
     }
 
     private void OnDrawGizmosSelected()

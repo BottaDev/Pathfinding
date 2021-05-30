@@ -19,4 +19,12 @@ public class Player : MonoBehaviour
         else if (Input.GetKey(KeyCode.D))
             transform.position += Speed * Time.deltaTime * Vector3.left;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 11)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

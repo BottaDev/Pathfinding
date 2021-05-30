@@ -21,7 +21,7 @@ public class PatrolState : IState
     {
         if (_entity.target != null)
         {
-            //_sm.ChangeState("ChaseState");
+            _sm.ChangeState("ChaseState");
             return;
         }
         
@@ -53,12 +53,15 @@ public class PatrolState : IState
         }
     }
 
+    /// <summary>
+    /// Returns to the normal patrol path
+    /// </summary>
     private void MoveToNodes()
     {
         if (_returnPath.Count == 0)
         {
-            _entity.startingNode = GetNerbyNode();
-            _entity.goalNode = _entity.wayPoints[_entity.currentWayPoint].gameObject.GetComponent<Node>();
+            _entity.startingNode = _entity.GetNerbyNode();
+            _entity.goalNode = _entity.wayPoints[0].gameObject.GetComponent<Node>();
             
             _returnPath = _entity.ConstructPath();
             _returnPath.Reverse();
@@ -76,28 +79,6 @@ public class PatrolState : IState
     
         if (pointDistance.magnitude < _entity.stoppingDistance)
             _currentNode++;
-    }
-
-    private Node GetNerbyNode()
-    {
-        GameObject nerbyNode = null;
-        
-        Collider[] targetsInViewRadius = Physics.OverlapSphere(_entity.transform.position, _entity.viewRadius, _entity.nodeLayer);
-
-        float distance = 999f;
-        
-        foreach (var item in targetsInViewRadius)
-        {
-            Vector3 nodeDistance = item.transform.position - _entity.transform.position;
-
-            if (nodeDistance.magnitude < distance)
-            {
-                distance = nodeDistance.magnitude;
-                nerbyNode = item.gameObject;
-            }
-        }
-        
-        return nerbyNode.GetComponent<Node>();
     }
 
     public void Move()
